@@ -1,0 +1,41 @@
+modules = ["nodejs-24"]
+[agent]
+expertMode = true
+
+[userenv]
+
+[userenv.shared]
+DISABLE_SQLITE_AUTO_BACKUP = "false"
+HOSTNAME = "0.0.0.0"
+INITIAL_PASSWORD = "CHANGEME"
+NODE_ENV = "development"
+PORT = "5000"
+STORAGE_ENCRYPTION_KEY_VERSION = "v1"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node --max-old-space-size=4096 scripts/dev/run-next.mjs dev"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
